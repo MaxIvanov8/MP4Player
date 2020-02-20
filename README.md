@@ -1,5 +1,7 @@
 # MP4Player
-This repo contains .NET project of simple MP4 Player on Windows Presentation Foundation(WPF) technology with using MVVM pattern. Player can play, pause, stop video and make bookmarks. User can choose any bookmarks by double click and go to relevant time of video.
+This repo contains .NET project of simple MP4 Player on Windows Presentation Foundation(WPF) technology with using MVVM pattern. 
+
+Player can play, pause, stop video and make bookmarks. User can choose any bookmarks by double click and go to relevant time of video.
 
 ## Clone:
 

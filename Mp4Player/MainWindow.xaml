@@ -15,7 +15,7 @@
         <CommandBinding Command="MediaCommands.TogglePlayPause" CanExecute="PlayBookMark_CanExecute" Executed="PlayBookMark_Executed" />
     </Window.CommandBindings>
     <Window.Resources>
-        <local:Converter x:Key="timeConverter"/>
+        <local:Converter x:Key="TimeConverter"/>
     </Window.Resources>
     <Grid MouseWheel="Grid_MouseWheel">
         <Grid.Background>
@@ -34,17 +34,12 @@
         </Grid.ColumnDefinitions>
         <ToolBar HorizontalAlignment="Stretch" Grid.Row="4" >
             <ToolBar.Resources>
-            <Style TargetType="{x:Type DockPanel}">
-                <Setter Property="HorizontalAlignment" Value="Center" />
-            </Style>
+                <Style TargetType="{x:Type DockPanel}">
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                </Style>
             </ToolBar.Resources>
-            <Button Command="ApplicationCommands.Open">
+            <Button Command="ApplicationCommands.Open" ToolTip="Open file">
                 <Image Source="Resources/open.png" Height="30" Width="25"/>
-                <Button.ToolTip>
-                    <ToolTip>
-                        Open file
-                    </ToolTip>
-                </Button.ToolTip>
             </Button>
             <Button Command="MediaCommands.Play">
                 <Image Source="Resources/play.png" Height="30" Width="25"/>
@@ -58,17 +53,12 @@
                 <Image Source="Resources/stop.png" Height="30" Width="25"/>
             </Button>
             <Separator />
-            <Button Command="MediaCommands.Select">
-                <Button.ToolTip>
-                    <ToolTip>
-                        Add a label
-                    </ToolTip>
-                </Button.ToolTip>
+            <Button Command="MediaCommands.Select" ToolTip="Add a label">
                 <Image Source="Resources/add.png" Height="30" Width="25"/>
             </Button>
         </ToolBar>
         <MediaElement Name="Player" Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" LoadedBehavior="Manual" Stretch="Uniform" />
-        <StatusBar Grid.Row="3">
+        <StatusBar Grid.Column="0" Grid.Row="3" >
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>
@@ -81,33 +71,38 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem>
-                <TextBlock Name="lblProgressStatus">00:00:00</TextBlock>
+                <TextBlock Name="LblProgressStatus" Text="00:00:00"/>
             </StatusBarItem>
             <StatusBarItem Grid.Column="1" HorizontalContentAlignment="Stretch">
-                <Slider Name="sliProgress" Thumb.DragStarted="SliProgress_DragStarted"  Thumb.DragCompleted="SliProgress_DragCompleted" ValueChanged="SliProgress_ValueChanged" />
+                <Slider Name="SliProgress" Thumb.DragStarted="SliProgress_DragStarted"  Thumb.DragCompleted="SliProgress_DragCompleted" ValueChanged="SliProgress_ValueChanged" />
             </StatusBarItem>
             <StatusBarItem Grid.Column="2">
-                <ProgressBar Name="pbVolume" Width="50" Height="12" Maximum="1" Value="{Binding ElementName=Player, Path=Volume}" />
+                <ProgressBar Name="PbVolume" Width="50" Height="12" Maximum="1" Value="{Binding ElementName=Player, Path=Volume}" />
             </StatusBarItem>
         </StatusBar>
         <StackPanel Grid.RowSpan="5" Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,2,0,2">
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Margin="0,0,0,3">
-            <TextBlock Text="File information:" Style="{StaticResource bigText}"/>
+            <TextBlock Text="File information:" Style="{StaticResource BigText}"/>
             <WrapPanel Margin="5,0,0,0">
-                <TextBlock Text="Name: " Style="{StaticResource mediumText}"/>
-                <TextBlock FontSize="14" x:Name="fileName" TextWrapping="WrapWithOverflow"/>
+                <TextBlock Text="Name: " Style="{StaticResource MediumText}"/>
+                <TextBlock FontSize="14" x:Name="FileName" TextWrapping="WrapWithOverflow"/>
             </WrapPanel>
             <WrapPanel Margin="5,0,0,0">
-                <TextBlock Text="Size: " Style="{StaticResource mediumText}"/>
-                <TextBlock FontSize="14" x:Name="fileSize"/>
+                <TextBlock Text="Size: " Style="{StaticResource MediumText}"/>
+                <TextBlock FontSize="14" x:Name="FileSize"/>
             </WrapPanel>
             <Separator Margin="5,0,5,0"/>
         </StackPanel>
-        <TextBlock Text="Bookmarks:" Style="{StaticResource bigText}" Grid.Column="1" Grid.Row="1"/>
+        <TextBlock Text="Bookmarks:" Style="{StaticResource BigText}" Grid.Column="1" Grid.Row="1"/>
         <Grid Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Margin="5,3,0,3">
-            <ListBox ItemsSource="{Binding Bookmarks}" SelectedItem="{Binding Selected}" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="179*"/>
+                <RowDefinition Height="12*"/>
+                <RowDefinition Height="145*"/>
+            </Grid.RowDefinitions>
+            <ListBox ItemsSource="{Binding Bookmarks}" SelectedItem="{Binding Selected}" ScrollViewer.VerticalScrollBarVisibility="Auto"  ScrollViewer.CanContentScroll="True" Grid.RowSpan="3" >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <WrapPanel>
@@ -115,7 +110,7 @@
                                 <MouseBinding Command="TogglePlayPause" MouseAction="LeftDoubleClick"/>
                             </WrapPanel.InputBindings>
                             <TextBlock FontSize="18" Text="{Binding StringFormat=№{0} - , Path=Number}"/>
-                            <TextBlock FontSize="18" Text="{Binding Bookmark, Converter={StaticResource timeConverter}}"/>
+                            <TextBlock FontSize="18" Text="{Binding Time, Converter={StaticResource TimeConverter}}"/>
                         </WrapPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

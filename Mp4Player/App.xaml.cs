@@ -1,11 +1,9 @@
-﻿using System.Windows;
-
-namespace Mp4Player
+﻿namespace Mp4Player
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App 
     {
     }
 }

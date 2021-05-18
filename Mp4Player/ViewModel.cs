@@ -5,34 +5,30 @@ using System.Runtime.CompilerServices;
 
 namespace Mp4Player
 {
-    class ViewModel : INotifyPropertyChanged
+    internal class ViewModel : INotifyPropertyChanged
     {
-        private Model _selected;
-        public ObservableCollection<Model> Bookmarks { get; set; }
+        private Bookmark _selected;
+        public ObservableCollection<Bookmark> Bookmarks { get; set; }
 
         public ViewModel()
         {
-            Bookmarks = new ObservableCollection<Model>();
+            Bookmarks = new ObservableCollection<Bookmark>();
         }
 
-        public Model Selected
+        public Bookmark Selected
         {
-            get { return _selected; }
+            get => _selected;
             set
             {
                 _selected = value;
-                OnPropertyChanged("Selected");
+                OnPropertyChanged();
             }
         }
 
-        public void Add(TimeSpan label)
+        public void Add(TimeSpan time)
         {
-            _selected = new Model
-            {
-                Number = Bookmarks.Count + 1,
-                Bookmark = label
-            };
-            Bookmarks.Insert(0, Selected);
+            _selected = new Bookmark(time, Bookmarks.Count);
+            Bookmarks.Insert(0, _selected);
         }
 
         public void Delete()

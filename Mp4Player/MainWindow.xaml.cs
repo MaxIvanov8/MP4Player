@@ -8,13 +8,13 @@ using System.Windows.Threading;
 
 namespace Mp4Player
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
-	public partial class MainWindow : Window
-	{
-		private bool _mediaPlayerIsStarting = false;
-		private bool _userIsDraggingSlider = false;
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow
+    {
+		private bool _mediaPlayerIsStarting;
+		private bool _userIsDraggingSlider;
 
 		public MainWindow()
 		{
@@ -22,7 +22,7 @@ namespace Mp4Player
 
 			DataContext = new ViewModel();
 
-			DispatcherTimer timer = new DispatcherTimer
+			var timer = new DispatcherTimer
 			{
 				Interval = TimeSpan.FromSeconds(1)
 			};
@@ -32,11 +32,11 @@ namespace Mp4Player
 
 		private void Timer_Tick(object sender, EventArgs e)
 		{
-			if ((Player.Source != null) && (Player.NaturalDuration.HasTimeSpan) && (!_userIsDraggingSlider))
+			if (Player.Source != null && Player.NaturalDuration.HasTimeSpan && !_userIsDraggingSlider)
 			{
-				sliProgress.Minimum = 0;
-				sliProgress.Maximum = Player.NaturalDuration.TimeSpan.TotalSeconds;
-				sliProgress.Value = Player.Position.TotalSeconds;
+				SliProgress.Minimum = 0;
+				SliProgress.Maximum = Player.NaturalDuration.TimeSpan.TotalSeconds;
+				SliProgress.Value = Player.Position.TotalSeconds;
 			}
 		}
 
@@ -47,15 +47,15 @@ namespace Mp4Player
 
 		private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			OpenFileDialog openFileDialog = new OpenFileDialog
+			var openFileDialog = new OpenFileDialog
 			{
 				Filter = "MP4 files (*.mp4;)|*.mp4"
 			};
 			if (openFileDialog.ShowDialog() == true)
 			{
 				Player.Source = new Uri(openFileDialog.FileName);
-				fileName.Text = Path.GetFileName(openFileDialog.FileName);
-				fileSize.Text = Math.Round(new FileInfo(openFileDialog.FileName).Length / Math.Pow(1024, 2), 2).ToString() + " Mb";
+				FileName.Text = Path.GetFileName(openFileDialog.FileName);
+				FileSize.Text = Math.Round(new FileInfo(openFileDialog.FileName).Length / Math.Pow(1024, 2), 2) + " Mb";
 				((ViewModel)DataContext).Delete();
 				_mediaPlayerIsStarting = false;
 				Player.Stop();
@@ -64,7 +64,7 @@ namespace Mp4Player
 
 		private void Play_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = (Player != null) && (Player.Source != null);
+			e.CanExecute = Player != null && Player.Source != null;
 		}
 
 		private void Play_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -102,12 +102,12 @@ namespace Mp4Player
 		private void SliProgress_DragCompleted(object sender, DragCompletedEventArgs e)
 		{
 			_userIsDraggingSlider = false;
-			Player.Position = TimeSpan.FromSeconds(sliProgress.Value);
+			Player.Position = TimeSpan.FromSeconds(SliProgress.Value);
 		}
 
 		private void SliProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			lblProgressStatus.Text = TimeSpan.FromSeconds(sliProgress.Value).ToString(@"hh\:mm\:ss");
+			LblProgressStatus.Text = TimeSpan.FromSeconds(SliProgress.Value).ToString(@"hh\:mm\:ss");
 		}
 
 		private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -132,7 +132,7 @@ namespace Mp4Player
 
 		private void PlayBookMark_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			Player.Position = ((ViewModel)DataContext).Selected.Bookmark;
+			Player.Position = ((ViewModel)DataContext).Selected.Time;
 			Player.Play();
 			_mediaPlayerIsStarting = true;
 		}
